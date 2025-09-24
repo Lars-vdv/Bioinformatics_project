@@ -60,60 +60,7 @@ class bio_seq:
     #                 records.append(bio_seq(full_seq, seq_type, current_label))
 
     #         return records
-def parse_fasta(file_path, seq_type):
-    """
-    Reads a FASTA file, parses the sequences, and returns a list of bio_seq objects.
-    """
-    sequences = []
-    current_label = None
-    current_seq = []
 
-    with open(file_path, 'r') as f:
-        for line in f:
-            line = line.strip()
-            if line.startswith('>'):
-                # If we have a sequence in buffer, save it
-                if current_label:
-                    sequences.append(bio_seq("".join(current_seq), seq_type, current_label))
-                
-                # Start a new sequence
-                current_label = line[1:]
-                current_seq = []
-            else:
-                # Append sequence part
-                if current_label:
-                    current_seq.append(line)
-
-        # Add the last sequence in the file
-        if current_label:
-            sequences.append(bio_seq("".join(current_seq), seq_type, current_label))
-            
-    return sequences
-
-if __name__ == "__main__":
-    # Get sequence type from user
-    seq_type = input("Enter sequence type (DNA, RNA, Protein): ")
-    
-    # Define the path to the FASTA file
-    fasta_file_path = 'sample.fasta'
-    
-    try:
-        # Read the FASTA file
-        bio_sequences = parse_fasta(fasta_file_path, seq_type)
-        
-        # Print the parsed sequences
-        print(f"\nFound {len(bio_sequences)} sequences in '{fasta_file_path}':")
-        for bio_s in bio_sequences:
-            print(f"  Label: {bio_s.label}")
-            print(f"  Sequence: {bio_s.seq}")
-            print(f"  Type: {bio_s.seq_type}")
-            print(f"  Is Valid: {bio_s.is_valid}")
-            print("-" * 20)
-            
-    except FileNotFoundError:
-        print(f"Error: The file '{fasta_file_path}' was not found.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
 
     # DNA Toolkit functions:
     def manual_input_seq(self, seq=None, seq_type=None, label=None):
