@@ -7,13 +7,14 @@ import math
 class bio_seq:
     """DNA sequnece class. Default value: ATCG, DNA, No label"""
 
-    def __init__(self, seq="ATCG", seq_type="DNA", label='No Label'):
+    def __init__(self, seq="ATCG", seq_type="DNA", label='No Label',raise_on_invalid=True):
         """Sequence initialization, validation."""
         self.seq = seq.upper()
         self.label = label
         self.seq_type = seq_type
         self.is_valid = self.__validate()
-        assert self.is_valid, f"Provided data does not seem to be a correct {self.seq_type} sequence"
+        if raise_on_invalid:
+            assert self.is_valid, f"Provided data does not seem to be a correct {self.seq_type} sequence"
 
     def FASTA_input_seq(self, path=None, seq=None, seq_type=None, label=None):
         """Input of a sequence from FASTA format"""
@@ -39,7 +40,7 @@ class bio_seq:
 
     def __validate(self):
         """Check the sequence to make sure it is a valid DNA/RNA/Protein string"""
-        return set(BASE[self.seq_type]).issuperset(self.seq)
+        return set(BASE[self.seq_type]).issuperset(self.seq) #set command gives a boolean value
 
     def get_seq_biotype(self):
         """Returns sequence type"""
