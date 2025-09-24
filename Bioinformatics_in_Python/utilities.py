@@ -47,3 +47,41 @@ def read_file(file_path):
         return ( 
             [line.strip() for line in f] 
         )
+
+def parse_fasta(path, seq_type):
+    """
+    Read a FASTA file with one or more records.
+    Return a list of bio_seq instances, one per record.
+    """
+    from bio_seq import bio_seq # Avoid circular import
+    records = [] #collection of bio_seq objects
+    label = None
+    seq_parts = [] #list of sequence parts until the next label is found
+
+    with open(path, "r") as fh:
+        count = 0
+        for line in fh:
+            count += line.count('>')
+        
+        
+        for line in fh: # Iterate through each line in the file
+            line = line.strip() # Remove leading/trailing whitespace
+            if not line: # Skip empty lines
+                continue
+
+            if line.startswith(">"): #when a new '>' is found, signals start of a new sequence
+                if label is not None: #f label is already set (meaning you just finished reading one record), you:
+                    full_seq = "".join(seq_parts) #join all parts of the sequence into one string
+                    records.append(bio_seq(full_seq, seq_type, label)) #create a new bio_seq object and add it to the records list
+                label = line[1:] #if label is None, set label to the current line without '>'
+                seq_parts = [] #reset seq_parts for the next sequence
+            else:
+                seq_parts.append(line.upper()) # add the current line (part of the sequence) to seq_parts, converting to uppercase
+
+    print(f"There are {count} sequences in this file.")
+
+    if label is not None: #read the last record after the loop ends
+        full_seq = "".join(seq_parts)
+        records.append(bio_seq(full_seq, seq_type, label))
+
+    return records

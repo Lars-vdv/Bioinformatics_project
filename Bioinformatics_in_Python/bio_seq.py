@@ -25,41 +25,7 @@ class bio_seq:
 
             self.seq_type = input("Enter sequence type (DNA, RNA, Protein): ")
             self.is_valid = self.__validate()
-            assert self.is_valid, f"Provided data does not seem to be a correct {self.seq_type} sequence"
-
-    # def parse_fasta(path, seq_type=None):
-    #     """
-    #     Read a FASTA file with one or more records.
-    #     Return a list of bio_seq instances, one per record.
-    #     """
-       
-    #     with open(path, 'r') as fh:
-            
-    #         count = 0
-    #         for line in fh:
-    #             count += line.count('>')
-    #         print(count)
-                
-    #             for line in fh:
-    #                 line = line.rstrip('\n')
-    #                 if not line:
-    #                     continue
-
-    #                 if line.startswith('>'):
-    #                     if current_label is not None:
-    #                         full_seq = ''.join(seq_lines).upper()
-    #                         records.append(bio_seq(full_seq, seq_type, current_label))
-    #                     current_label = line[1:]  # drop '>'
-    #                     seq_lines     = []
-    #                 else:
-    #                     seq_lines.append(line)
-
-    #             # save the last record
-    #             if current_label is not None:
-    #                 full_seq = ''.join(seq_lines).upper()
-    #                 records.append(bio_seq(full_seq, seq_type, current_label))
-
-    #         return records
+            assert self.is_valid, f"Provided data does not seem to be a correct {self.seq_type} sequence"                
 
 
     # DNA Toolkit functions:
