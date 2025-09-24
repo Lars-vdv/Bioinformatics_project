@@ -1,21 +1,31 @@
 import sys
 
-def colored(seq):
-    """ Change ATCG to a colored letter """
+def colored(data):
+    """Return a colored string for a sequence or a dict of nucleotide counts."""
     colors = {
-    'A': '\033[31m',  # red
-    'C': '\033[12m',  # blue
-    'G': '\033[33m',  # yellow
-    'T': '\033[32m',  # green
-    'U': '\033[35m',  # magenta
-    'reset': '\033[0m'
+        'A': '\033[31m',  # red
+        'C': '\033[34m',  # blue
+        'G': '\033[33m',  # yellow
+        'T': '\033[32m',  # green
+        'U': '\033[35m',  # magenta
+        'reset': '\033[0m'
     }
 
+    # If it's a dict, build a "{ A:1, C:2, ... }" string with colored keys
+    if isinstance(data, dict):
+        items = []
+        for nuc, count in data.items():
+            code = colors.get(nuc, colors['reset'])
+            items.append(f"{code}{nuc}{colors['reset']}: {count}")
+        return "{ " + ", ".join(items) + " }"
+
+    # Otherwise assume it's a sequence string
     result = ""
-    for nuc in seq:
-        color_code = colors.get(nuc, colors['reset'])
-        result += f"{color_code}{nuc}{colors['reset']}"
+    for nuc in data:
+        code = colors.get(nuc, colors['reset'])
+        result += f"{code}{nuc}{colors['reset']}"
     return result
+
 
 def colored_html(seq):
     colors = {

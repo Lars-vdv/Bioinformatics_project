@@ -2,6 +2,8 @@ import random
 from Bioinformatics_in_Python.structures import *
 from Bioinformatics_in_Python.utilities import *
 
+import os
+print(os.getcwd())  # Check current working directory
 
 def generate_dna_sequence(length):
     nuc = 'ATCG'
@@ -104,13 +106,12 @@ def gc_content_subsec(dna_seq, k=20):
     """
     #return [....] creates list
     #[expression for variable in iterable]
-    return f'{round(
+    return [
         gc_content(dna_seq[i : i + k]) #dna_seq[start : end], When there are no more i values in the range, the loop ends.
         for i in range(0, len(dna_seq) - k + 1, k) #range(start, stop, step)
         # range start=0, stop=len(dna_seq)-k+1 ensures full windows only, step=k, +1 is needed because python excludes stop index 
         #len(dna_seq) - k is the highest starting index that still leaves k-amount characters to slice.
-    )}%'
-
+    ]
 
 
 #Create dictonary for FASTA file
@@ -136,18 +137,18 @@ def FASTA_to_dict(file_path):
 
 
 #Create GC content dictionary
-def GC_dict(FASTAdict,ndigits=2):
+def GC_dict(FASTAdict):
     """Returns a dictionary with rounded GC content for each sequence in FASTAdict"""
     temp = {
-        key: round(gc_content(value),ndigits) for (key, value) in FASTAdict.items()
+        key: (gc_content(value)) for (key, value) in FASTAdict.items()
         } #substitute DNA sequence from FASTAdict with GC content, FASTAdict.items() returns a list of tuples (key, value) for each item in the dictionary, key: FASTAlabel, value: DNA sequence
     return temp
 
-#Create GC content_subseq dictionary
-def GC_dict_subseq(FASTAdict,ndigits=2):
-    """Returns a dictionary with GC content_subseq for each sequence in FASTAdict"""
-    temp = {key: round(gc_content_subseq(value),ndigits) for (key, value) in FASTAdict.items()} #substitute DNA sequence from FASTAdict with GC content, FASTAdict.items() returns a list of tuples (key, value) for each item in the dictionary, key: FASTAlabel, value: DNA sequence
-    return temp
+def GC_dict_subseq(FASTAdict, k=20):
+    return {
+        header: gc_content_subseq(seq, k)
+        for header, seq in FASTAdict.items()
+    }
 
 #Find max and min GC content
 #maxGCkey = max(GC_dict, key=GC_dict.get) #max() returns the key with the highest value in GC_dict, key=GC_dict.get tells max() to use the values of GC_dict to compare
@@ -168,6 +169,7 @@ def translate_seq(dna_seq, init_pos=0):
     )
 
 #frequency of each codon encoding a given aminoacid in a DNA sequence
+
 def codon_usage(dna_seq, aminoacid):
     """Provides the frequency of each codon encoding a given aminoacid in a DNA sequence"""
     from collections import Counter
@@ -181,3 +183,68 @@ def codon_usage(dna_seq, aminoacid):
     for dna_seq in freqDict:
         freqDict[dna_seq] = round(freqDict[dna_seq] / totalWight, 2)
     return freqDict
+
+def MW_protein_seq(protein_seq):
+    """Calculates the molecular weight of a protein sequence"""
+    return sum(MW_proteins[AA] for AA in protein_seq)
+#AA is the variable for each AA in the protein sequence, you can choose whatever variable you want
+# AA in protein_seq checks if the AA is in the MW_proteins dictionary, if it is not it will not be counted
+
+def gen_reading_frames(dna_seq, startReadPos=0, endReadPos=None):
+    """Generates all 6 reading frames of a DNA sequence, including reverse complement"""
+    if endReadPos is None or endReadPos > len(dna_seq):
+        endReadPos = len(dna_seq)
+    #if endReadPos is not defined or endReadPos is larger than the length of the dna_seq, set endReadPos to the length of the dna_seq
+    frames = []
+    segment = dna_seq[startReadPos:endReadPos] # slice the dna_seq from startReadPos to endReadPos
+    dna_seq = segment  # update dna_seq to be the sliced segment
+    # Forward frames
+    for i in range(3): # 0, 1, 2 positions from which to start translation
+        frames.append(translate_seq(dna_seq, init_pos=i))
+    # Reverse frames
+    rev_comp = reverse_complement(dna_seq)
+    for i in range(3):
+        frames.append(translate_seq(rev_comp, init_pos=i))
+    return frames
+
+def all_proteins_from_ORF(dna_seq, startReadPos=0, endReadPos=None, ordered=False):
+    """
+    Return a dict mapping frame labels to lists of every ORF 
+    (from 'M' up to but not including the next '_') in that frame. 
+    startReadPos and endReadPos represent NUCLEOTIDE positions in the original DNA sequence.
+    """
+    labels = ['fwd1','fwd2','fwd3','rev1','rev2','rev3']
+    startPos = startReadPos
+    endPos = endReadPos
+    frames = gen_reading_frames(dna_seq, startReadPos=startPos, endReadPos=endPos)
+    orf_dict = {}
+
+    for label, frame in zip(labels, frames): # loops through each frame with its corresponding label
+        prot = ''.join(frame)
+        orfs = []
+        search_pos = 0
+
+        while True: # loop to find all ORFs in the protein sequence
+            # find the next 'M'
+            start = prot.find('M', search_pos)
+            if start == -1:
+                break
+
+            # find the next '_' after that 'M'
+            stop = prot.find('_', start + 1)
+            if stop == -1:
+                break
+
+            orfs.append(prot[start:stop])
+            # advance past this 'M' so we can catch overlapping ORFs 
+            search_pos = stop + 1 # move search position to just after the found stop codon to prevent duplicates
+
+        orf_dict[label] = orfs
+
+    if ordered:
+        for label in orf_dict: #here you loop through the keys of the dictionary = label, otherwise only last label would be sorted
+            orf_dict[label].sort(key=len, reverse=True) # Sort ORFs by length in descending order if ordered is True
+    return orf_dict
+
+
+
