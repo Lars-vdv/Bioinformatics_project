@@ -1,4 +1,4 @@
-from bio_seq import bio_seq
+from bio_seq import *
 from bio_structs import *
 from utilities import *
 from pprint import pprint
@@ -7,6 +7,7 @@ import math
                
 parse_fasta(path=r"C:\Users\larsv\OneDrive\Documenten\VSC\Bioinformatics_project\Bioinformatics_in_Python\test_data\rosalind_gc.txt", seq_type="DNA", create_variables=True)
 
+print("hello")
 
 print(seq_1.get_seq_info())
 print(seq_1.countNucFrequency(color=True))

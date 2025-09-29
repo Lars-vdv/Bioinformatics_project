@@ -98,12 +98,20 @@ def parse_fasta(path, seq_type, create_variables=False):
             print(f"Warning: Sequence '{label}' is invalid for type '{seq_type}' and will be skipped.")
     print(f"Successfully parsed {len(records)} valid {seq_type} sequences from the file.")
     
-    if create_variables == True: #The enumerate function wraps any iterable and yields pairs of (index, element), allowing you to track positions without manual counter management.
-            for i, record in enumerate(records): # Loop through each record with its index, index starts at 0 and ends at records length -1
-                var_name = f"seq_{i+1}" # Create a variable name like seq_1, seq_2, etc.
-                globals()[var_name] = record #globals() returns the dictionary representing the current module’s global variables.
-                                            #Assigning to globals()[var_name] creates a new global variable with the name in var_name.
-                print(f"Created variable '{var_name}' for sequence with label '{record.label}'")
+    if create_variables == True:
+        
+        global record
+
+         #The enumerate function wraps any iterable and yields pairs of (index, element), allowing you to track positions without manual counter management.
+        for i, record in enumerate(records): # Loop through each record with its index, index starts at 0 and ends at records length -1
+            var_name = f"seq_{i+1}" # Create a variable name like seq_1, seq_2, etc.
+            globals()[var_name] = record #globals() returns the dictionary representing the current module’s global variables.
+                                        #Assigning to globals()[var_name] creates a new global variable with the name in var_name.
+            print(f"Created variable '{var_name}' for sequence with label '{record.label}'")
+    
+
 
     else:
         return records
+    
+    
