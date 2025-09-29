@@ -28,68 +28,6 @@ class bio_seq:
             self.is_valid = self.__validate()
             assert self.is_valid, f"Provided data does not seem to be a correct {self.seq_type} sequence"                
 
-    def parse_fasta(path, seq_type, create_variables=False):
-        """
-        !! ASSIGN VARIABLE TO FUNCTION TO CREATE LIST !!
-        Read a FASTA file with one or more records and returns a list of bio_seq instances, one per record.
-        If create_variables is True, create global variables seq_1, seq_2, etc. for each sequence.
-        If a sequence is invalid for the given seq_type, it will be skipped with a warning.
-        """
-         # Avoid circular import
-        records = [] #collection of bio_seq objects
-        label = None
-        seq_parts = [] #list of sequence parts until the next label is found
-
-        with open(path, "r") as f:
-            count = 0
-            for line in f:
-                count += line.count('>')
-                
-            print(f"There are {count} total sequences in this file.")
-
-        with open(path, "r") as fh:
-
-            
-            
-            for line in fh: # Iterate through each line in the file
-                line = line.strip() # Remove leading/trailing whitespace
-                if not line: # Skip empty lines
-                    continue
-
-                if line.startswith(">"): #when a new '>' is found, signals start of a new sequence
-                    if label is not None: #f label is already set (meaning you just finished reading one record), you:
-                        full_seq = "".join(seq_parts) #join all parts of the sequence into one string
-                        temp_seq = bio_seq(full_seq, seq_type, label,raise_on_invalid=False) #create a new bio_seq object and add it to the records list
-                        if temp_seq.is_valid == True:
-                            records.append(temp_seq) # add the bio_seq object to the records list only if it's valid
-                        else:
-                            print(f"Warning: Skipping invalid {seq_type} sequence with label '{label}'")
-                    label = line[1:] #if label is None, set label to the current line without '>'
-                    seq_parts = [] #reset seq_parts for the next sequence
-                else:
-                    seq_parts.append(line.upper()) # add the current line (part of the sequence) to seq_parts, converting to uppercase
-
-        if label is not None: #read the last record after the loop ends
-            full_seq = "".join(seq_parts)
-            temp_seq = bio_seq(full_seq, seq_type, label,raise_on_invalid=False)
-            if temp_seq.is_valid:
-                records.append(temp_seq)
-            else:
-                print(f"Warning: Sequence '{label}' is invalid for type '{seq_type}' and will be skipped.")
-        print(f"Successfully parsed {len(records)} valid {seq_type} sequences from the file.")
-        
-        if create_variables == True:
-
-            #The enumerate function wraps any iterable and yields pairs of (index, element), allowing you to track positions without manual counter management.
-            for i, record in enumerate(records): # Loop through each record with its index, index starts at 0 and ends at records length -1
-                var_name = f"seq_{i+1}" # Create a variable name like seq_1, seq_2, etc.
-                globals()[var_name] = record #globals() returns the dictionary representing the current module’s global variables.
-                                            #Assigning to globals()[var_name] creates a new global variable with the name in var_name.
-                print(f"Created variable '{var_name}' for sequence with label '{record.label}'")
-
-        else:
-            return records
-    
 
     # DNA Toolkit functions:
     def manual_input_seq(self, seq=None, seq_type=None, label=None):

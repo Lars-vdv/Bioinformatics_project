@@ -4,10 +4,9 @@ from utilities import *
 from pprint import pprint
 import math
 
-sequences = bio_seq()             
-sequences.parse_fasta(path=r"C:\Users\larsv\OneDrive\Documenten\VSC\Bioinformatics_project\Bioinformatics_in_Python\test_data\rosalind_gc.txt", seq_type="DNA", create_variables=True)
+sequences = parse_fasta(path=r"C:\Users\larsv\OneDrive\Documenten\VSC\Bioinformatics_project\Bioinformatics_in_Python\test_data\rosalind_gc.txt", seq_type="DNA", create_variables=True)
 
-print("hello")
+print(sequences)
 
 print(seq_1.get_seq_info())
 print(seq_1.countNucFrequency(color=True))
