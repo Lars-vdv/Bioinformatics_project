@@ -4,8 +4,8 @@ from utilities import *
 from pprint import pprint
 import math
 
-               
-parse_fasta(path=r"C:\Users\larsv\OneDrive\Documenten\VSC\Bioinformatics_project\Bioinformatics_in_Python\test_data\rosalind_gc.txt", seq_type="DNA", create_variables=True)
+sequences = bio_seq()             
+sequences.parse_fasta(path=r"C:\Users\larsv\OneDrive\Documenten\VSC\Bioinformatics_project\Bioinformatics_in_Python\test_data\rosalind_gc.txt", seq_type="DNA", create_variables=True)
 
 print("hello")
 
