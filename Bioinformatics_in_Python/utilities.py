@@ -41,12 +41,21 @@ def colored_html(seq):
 #Read data from a (FASTA) file and create list
 def read_file(file_path):
     """
-    Read a (FASTA) file and return a list of stripped lines.
+    Read a file and return a list of stripped lines.
     """
     with open(file_path, 'r') as f:
         return ( 
             [line.strip() for line in f] 
         )
+
+def write_file(file_path, seq, mode='w'):
+    """
+    Write a sequence to a file.
+    """
+    with open(file_path, mode) as f:
+        f.write(seq + '\n')
+
+    
 
 def parse_fasta(path, seq_type, create_variables=False):
     """
@@ -99,15 +108,15 @@ def parse_fasta(path, seq_type, create_variables=False):
     print(f"Successfully parsed {len(records)} valid {seq_type} sequences from the file.")
     
     if create_variables == True:
-
+        sequences_dict = {}
          #The enumerate function wraps any iterable and yields pairs of (index, element), allowing you to track positions without manual counter management.
         for i, record in enumerate(records): # Loop through each record with its index, index starts at 0 and ends at records length -1
             var_name = f"seq_{i+1}" # Create a variable name like seq_1, seq_2, etc.
-            globals()[var_name] = record #globals() returns the dictionary representing the current module’s global variables.
-                                        #Assigning to globals()[var_name] creates a new global variable with the name in var_name.
+            sequences_dict[var_name] = record 
             print(f"Created variable '{var_name}' for sequence with label '{record.label}'")
+            print(id(sequences_dict))
+        return sequences_dict
 
     else:
         return records
-    
     

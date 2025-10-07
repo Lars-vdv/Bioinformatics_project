@@ -197,4 +197,9 @@ class bio_seq:
         if ordered:
             for label in orf_dict: #here you loop through the keys of the dictionary = label, otherwise only last label would be sorted
                 orf_dict[label].sort(key=len, reverse=True) # Sort ORFs by length in descending order if ordered is True
+        
+        for label, orfs in orf_dict.items():
+            print(f"{label}:")
+            for orf in orfs:
+                print(" ", orf)
         return orf_dict
