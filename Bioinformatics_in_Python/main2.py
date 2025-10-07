@@ -15,9 +15,7 @@ seq_1dict = seq_1.all_proteins_from_ORF(ordered=True)
 
 write_file("test_output.txt", seq_1.seq)
 
-for rf in seq_1.all_proteins_from_ORF():
 
-    write_file("test_output.txt", rf)
 # for rf in seq_1.gen_reading_frames():
 #     write_file("test_output.txt", rf)
 

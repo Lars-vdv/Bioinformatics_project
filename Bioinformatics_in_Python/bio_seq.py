@@ -160,7 +160,7 @@ class bio_seq:
 
         return frames
 
-    def all_proteins_from_ORF(self, startReadPos=0, endReadPos=None, ordered=False):
+    def all_proteins_from_ORF(self, startReadPos=0, endReadPos=None, ordered=False, create_file = False):
         """
         Return a dict mapping frame labels to lists of every ORF 
         (from 'M' up to but not including the next '_') in that frame. 
@@ -197,6 +197,14 @@ class bio_seq:
         if ordered:
             for label in orf_dict: #here you loop through the keys of the dictionary = label, otherwise only last label would be sorted
                 orf_dict[label].sort(key=len, reverse=True) # Sort ORFs by length in descending order if ordered is True
+        
+        if create_file == True:
+            file_name = input("Enter file name (e.g. .txt):")
+            with open(file_name, "w") as f:
+                for label, orfs in orf_dict.items():
+                    f.write(f"{label}:\n")
+                    for orf in orfs:
+                        f.write(f"  {orf}\n")
         
         for label, orfs in orf_dict.items():
             print(f"{label}:")
