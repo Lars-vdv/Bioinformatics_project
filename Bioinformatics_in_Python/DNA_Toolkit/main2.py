@@ -12,20 +12,18 @@ print(seq_1.get_seq_info())
 
 seq_1dict = seq_1.all_proteins_from_ORF(ordered=True)
 
+print(seq_1.gc_content_subsec(k=100, create_file=False))
 
-write_file("test_output.txt", seq_1.seq)
+write_file("test_output.txt", seq_1.gc_content_subsec(k=100, create_file=True), mode='a')
 
-
-# for rf in seq_1.gen_reading_frames():
-#     write_file("test_output.txt", rf)
 
 #Check if the returned data is a dictionary and not empty
 # if isinstance(sequences_data, dict) and sequences_data:
 #     # This is the correct way to dynamically create global variables in the main script's scope.
 #     globals().update(sequences_data)
     
-#     # Now, variables like seq_1, seq_2, etc., exist and can be accessed directly.
-#     # The script will fail if 'seq_1' was not in the parsed data, so we check for its existence.
+    # Now, variables like seq_1, seq_2, etc., exist and can be accessed directly.
+    # The script will fail if 'seq_1' was not in the parsed data, so we check for its existence.
 #     if 'seq_1' in globals():
 #         print(seq_1.get_seq_info())
 #         print(seq_1.countNucFrequency(color=True))

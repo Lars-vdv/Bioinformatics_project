@@ -52,6 +52,9 @@ def write_file(file_path, seq, mode='w'):
     """
     Write a sequence to a file.
     """
+    if isinstance(seq, list):
+        seq = '\n'.join(seq)
+
     with open(file_path, mode) as f:
         f.write(seq + '\n')
 

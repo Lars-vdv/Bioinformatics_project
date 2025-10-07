@@ -92,14 +92,21 @@ class bio_seq:
         pct = gc_count / len(self.seq) * 100
         return f'{pct:.2f}%'
 
-    def gc_content_subsec(self, k=20):
+    def gc_content_subsec(self, k=20, create_file=False):
         """Return a list of GC% strings for each non-overlapping k-mer."""
         results = []
         for i in range(0, len(self.seq) - k + 1, k):
             subseq = self.seq[i : i + k]
             gc = subseq.count("C") + subseq.count("G")
             pct = gc / len(subseq) * 100
-            results.append(f"{pct:.2f}%")
+            
+            if create_file == True:
+                if i == 0:
+                    results.append(f"{pct:.2f}% for positions 1-{k}")
+                else:
+                    results.append(f"{pct:.2f}% for positions {i+1}-{i+k}")
+            else:
+                results.append(f"{pct:.2f}%")
         return results
 
 
