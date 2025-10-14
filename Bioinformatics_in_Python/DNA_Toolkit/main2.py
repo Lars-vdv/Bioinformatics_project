@@ -4,17 +4,21 @@ from utilities import *
 from pprint import pprint
 import math
 
-sequences_data = parse_fasta(path="test_data/rosalind_gc.txt", seq_type="DNA", create_variables=True)
+# sequences_data = parse_fasta(path="test_data/rosalind_gc.txt", seq_type="DNA", create_variables=True)
 
-print(sequences_data['seq_1'].get_seq_info()) #alternative
-globals().update(sequences_data) #see OneNote for explanation
-print(seq_1.get_seq_info())
+# print(sequences_data['seq_1'].get_seq_info()) #alternative
+# globals().update(sequences_data) #see OneNote for explanation
+# print(seq_1.get_seq_info())
 
-seq_1dict = seq_1.all_proteins_from_ORF(ordered=True)
+# seq_1dict = seq_1.all_proteins_from_ORF(ordered=True)
 
-print(seq_1.gc_content_subsec(k=100, create_file=False))
+# print(seq_1.gc_content_subsec(k=100, create_file=False))
 
-write_file("test_output.txt", seq_1.gc_content_subsec(k=100, create_file=True), mode='a')
+# write_file("test_output.txt", seq_1.gc_content_subsec(k=100, create_file=True), mode='a')
+
+
+test_protein = bio_seq(seq="NQSTPSTNATSTP", seq_type="Protein", label="test_protein")
+test_protein.find_motif(motif="N{P}[ST]{P}", amount=4)
 
 
 #Check if the returned data is a dictionary and not empty

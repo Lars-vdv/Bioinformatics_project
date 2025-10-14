@@ -1,4 +1,5 @@
 import sys
+import urllib.request
 
 def colored(data):
     """Return a colored string for a sequence or a dict of nucleotide counts."""
@@ -123,3 +124,27 @@ def parse_fasta(path, seq_type, create_variables=False):
     else:
         return records
     
+def protein_scrape_uniprot(path=""):
+    """Scrape protein sequences from Uniprot given a file with a list of UniProt IDs."""
+    with open("", "r") as f:
+        temp = [line.strip()[0:6] for line in f]  # Read all lines from the file and strip first 6 characters whitespace/newline characters, you need to call for line in f.readlines() to iterate through each line, else it will treat the whole file as one string
+    
+    with open("", "r") as f:
+        temp2 = [line.strip() for line in f]  # Read all lines from the file and strip first 6 characters whitespace/newline characters, you need to call for line in f.readlines() to iterate through each line, else it will treat the whole file as one string
+
+    temp_dict = {}
+
+    for i, seq in enumerate(temp2):
+
+        var_name = f"{temp2[i]}"  # Create variable names like seq_1, seq_2, etc.
+        url_name = f"https://rest.uniprot.org/uniprotkb/{seq[:6]}.fasta"
+        temp_dict[var_name] = urllib.request.urlopen(url_name).read().decode('utf-8')
+
+    for i, seq in enumerate(temp_dict.values()):
+        
+        start = seq.find('\n') + 1     # Update the dictionary to only contain the actual sequence, removing the header line
+        temp_dict[f"{temp2[i]}"] = seq[start:]
+        temp_dict[f"{temp2[i]}"] = temp_dict[f"{temp2[i]}"].replace("\n","")  
+        #cant use var_name here because it will always refer to the last value of i from the previous loop
+        #line.replace because strip only removes from start and end of string, not middles of string
+    return temp_dict    

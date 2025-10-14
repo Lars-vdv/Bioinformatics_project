@@ -218,3 +218,137 @@ class bio_seq:
             for orf in orfs:
                 print(" ", orf)
         return orf_dict
+    
+
+    def find_motif(self, motif="", amount=0):
+        """Find all occurrences of a given motif in a protein sequence and return their starting positions (1-based index).
+        In this function, [] only allows for two amino acids, and {} only allows for one amino acid."""
+        from bio_structs import BASE
+        aa = BASE.get("Protein")
+        positions = []
+        self = self.upper()
+        AA_motif = amount
+        motif_check = motif if motif else ""
+        consumed = 0
+        subsec_motif_correct = True
+
+        if motif == "":
+            motif = input("Enter motif (X for any AA, {X} for any AA except X, [XY] for either X or Y): ")
+            motif_check = motif
+        amount -= 1
+        if amount == 0:
+            amount = int(input("Enter motif length:")) - 1
+            AA_motif = amount + 1
+
+        while len(self) > 0:
+            # when motif_check is empty because of a true full match we append; use full_motif_correct flag to be explicit
+            if len(motif_check) == 0 and subsec_motif_correct:
+                motif_check = motif
+                pos = consumed + start + 1
+                positions.append(pos)
+                self = self[start+1:]
+                consumed += start + 1
+                continue
+
+            start = self.find(motif[0])
+            if start == -1:
+                if not positions:
+                    print("No motifs found")
+                    return
+                return positions
+
+            protein_check = self[start:start+AA_motif]
+
+            if motif_check and (motif_check[0] == "X" or motif_check[0] not in aa):
+                x = 0
+
+            # assume not full_motif_correct until we prove all tokens full_motif_correct
+            full_motif_correct = True
+            while len(motif_check) != 0:
+                if motif_check[0] == "{":
+                    motif_check = motif_check[1:]
+                    if not protein_check: #if not tests a condition as true when the list/string is empty. If protein_check would give False (Boolean context)
+                        # if we run out of protein to check before motif is consumed, if not function 
+                        full_motif_correct = False 
+                        motif_check = motif       # mismatch: reset to full motif
+                        self = self[start+1:]
+                        consumed += start + 1
+                        subsec_motif_correct = False
+                        break
+                    if protein_check[0] != motif_check[0]:
+                        motif_check = motif_check[2:]
+                        protein_check = protein_check[1:]
+                        subsec_motif_correct = True
+                        continue
+                    else:
+                        full_motif_correct = False
+                        motif_check = motif       # mismatch: reset
+                        self = self[start+1:]
+                        consumed += start + 1
+                        subsec_motif_correct = False
+                        break
+
+                if motif_check[0] == "[":
+                    motif_check = motif_check[1:]
+                    if not protein_check:
+                        full_motif_correct = False
+                        motif_check = motif
+                        self = self[start+1:]
+                        consumed += start + 1
+                        subsec_motif_correct = False
+                        break
+                    if protein_check[0] == motif_check[0] or protein_check[0] == motif_check[1]:
+                        motif_check = motif_check[3:]
+                        protein_check = protein_check[1:]
+                        subsec_motif_correct = True
+                        continue
+                    else:
+                        full_motif_correct = False
+                        motif_check = motif
+                        self = self[start+1:]
+                        consumed += start + 1
+                        subsec_motif_correct = False
+                        break
+
+                if motif_check[0] == "X":
+                    if not protein_check:
+                        full_motif_correct = False
+                        motif_check = motif
+                        self = self[start+1:]
+                        consumed += start + 1
+                        subsec_motif_correct = False
+                        break
+                    motif_check = motif_check[1:]
+                    protein_check = protein_check[1:]
+                    subsec_motif_correct = True
+                    continue
+
+                if not protein_check:
+                    full_motif_correct = False
+                    motif_check = motif
+                    self = self[start+1:]
+                    consumed += start + 1
+                    subsec_motif_correct = False
+                    break
+
+                if motif_check[0] == protein_check[0]:
+                    motif_check = motif_check[1:]
+                    protein_check = protein_check[1:]
+                    subsec_motif_correct = True
+                    continue
+
+                # literal mismatch
+                full_motif_correct = False
+                motif_check = motif
+                self = self[start+1:]
+                consumed += start + 1
+                subsec_motif_correct = False
+                break
+
+            # if we exited loop and motif_check consumed (len==0) and full_motif_correct True -> record
+            if len(motif_check) == 0 and full_motif_correct:
+                # set subsec_motif_correct True so the next while-iteration appends and advances
+                subsec_motif_correct = True
+                continue
+
+        return positions
