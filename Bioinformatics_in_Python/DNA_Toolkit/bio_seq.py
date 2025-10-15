@@ -16,6 +16,10 @@ class bio_seq:
         if raise_on_invalid == True:
             assert self.is_valid, f"Provided data does not seem to be a correct {self.seq_type} sequence"
 
+    def __validate(self):
+        """Check the sequence to make sure it is a valid DNA/RNA/Protein string"""
+        return set(BASE[self.seq_type]).issuperset(self.seq) #set command gives a boolean value
+    
     def FASTA_input_seq(self, path=None, seq=None, seq_type=None, label=None):
         """Input of a sequence from FASTA format"""
         with open(path, 'r') as f:
@@ -38,9 +42,6 @@ class bio_seq:
         self.is_valid = self.__validate()
         assert self.is_valid, f"Provided data does not seem to be a correct {self.seq_type} sequence"
 
-    def __validate(self):
-        """Check the sequence to make sure it is a valid DNA/RNA/Protein string"""
-        return set(BASE[self.seq_type]).issuperset(self.seq) #set command gives a boolean value
 
     def get_seq_biotype(self):
         """Returns sequence type"""
