@@ -227,7 +227,7 @@ class bio_seq:
         from bio_structs import BASE
         aa = BASE.get("Protein")
         positions = []
-        self = self.upper()
+        self.seq = self.seq.upper()
         AA_motif = amount
         motif_check = motif if motif else ""
         consumed = 0
@@ -241,24 +241,24 @@ class bio_seq:
             amount = int(input("Enter motif length:")) - 1
             AA_motif = amount + 1
 
-        while len(self) > 0:
+        while len(self.seq) > 0:
             # when motif_check is empty because of a true full match we append; use full_motif_correct flag to be explicit
             if len(motif_check) == 0 and subsec_motif_correct:
                 motif_check = motif
                 pos = consumed + start + 1
                 positions.append(pos)
-                self = self[start+1:]
+                self.seq = self.seq[start+1:]
                 consumed += start + 1
                 continue
 
-            start = self.find(motif[0])
+            start = self.seq.find(motif[0])
             if start == -1:
                 if not positions:
                     print("No motifs found")
                     return
                 return positions
 
-            protein_check = self[start:start+AA_motif]
+            protein_check = self.seq[start:start+AA_motif]
 
             if motif_check and (motif_check[0] == "X" or motif_check[0] not in aa):
                 x = 0
@@ -272,7 +272,7 @@ class bio_seq:
                         # if we run out of protein to check before motif is consumed, if not function 
                         full_motif_correct = False 
                         motif_check = motif       # mismatch: reset to full motif
-                        self = self[start+1:]
+                        self.seq = self.seq[start+1:]
                         consumed += start + 1
                         subsec_motif_correct = False
                         break
@@ -284,7 +284,7 @@ class bio_seq:
                     else:
                         full_motif_correct = False
                         motif_check = motif       # mismatch: reset
-                        self = self[start+1:]
+                        self.seq = self.seq[start+1:]
                         consumed += start + 1
                         subsec_motif_correct = False
                         break
@@ -294,7 +294,7 @@ class bio_seq:
                     if not protein_check:
                         full_motif_correct = False
                         motif_check = motif
-                        self = self[start+1:]
+                        self.seq = self.seq[start+1:]
                         consumed += start + 1
                         subsec_motif_correct = False
                         break
@@ -306,7 +306,7 @@ class bio_seq:
                     else:
                         full_motif_correct = False
                         motif_check = motif
-                        self = self[start+1:]
+                        self.seq = self.seq[start+1:]
                         consumed += start + 1
                         subsec_motif_correct = False
                         break
@@ -315,7 +315,7 @@ class bio_seq:
                     if not protein_check:
                         full_motif_correct = False
                         motif_check = motif
-                        self = self[start+1:]
+                        self.seq = self.seq[start+1:]
                         consumed += start + 1
                         subsec_motif_correct = False
                         break
@@ -327,7 +327,7 @@ class bio_seq:
                 if not protein_check:
                     full_motif_correct = False
                     motif_check = motif
-                    self = self[start+1:]
+                    self.seq = self.seq[start+1:]
                     consumed += start + 1
                     subsec_motif_correct = False
                     break
@@ -341,7 +341,7 @@ class bio_seq:
                 # literal mismatch
                 full_motif_correct = False
                 motif_check = motif
-                self = self[start+1:]
+                self.seq = self.seq[start+1:]
                 consumed += start + 1
                 subsec_motif_correct = False
                 break
