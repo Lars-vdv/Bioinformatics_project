@@ -12,6 +12,7 @@ class bio_seq:
         self.seq = seq.upper()
         self.label = label
         self.seq_type = seq_type
+        self.seq_len = len(seq)
         self.is_valid = self.__validate()
         if raise_on_invalid == True:
             assert self.is_valid, f"Provided data does not seem to be a correct {self.seq_type} sequence"

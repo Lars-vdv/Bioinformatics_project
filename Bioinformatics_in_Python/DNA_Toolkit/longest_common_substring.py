@@ -9,20 +9,23 @@ from difflib import SequenceMatcher
 
 seq = parse_fasta(path=r"test_data\rosalind_lcsm.txt", seq_type="DNA", create_variables=False)
 
+for i in range(len(seq)):
+    print(getattr(seq[i], "seq_len"))
 
+print(getattr(seq[0], "seq_len")) #test if parsing was successful
 
-print(getattr(seq[0], "seq")) #test if parsing was successful
+# for i in len(getattr(seq, "seq")):
+#     seq_strings = []
+#     seq__strings = seq[i]
 
-for i in len(getattr(seq, "seq")):
-    seq_strings = []
-    seq__strings = seq[i]
-    
-
-#first order the sequences on length
 seq = sorted(seq, key=lambda s: s.seq_len, reverse=True)
-print(seq)
 
-print(getattr(seq[0], "seq"))
+# #first order the sequences on length
+# seq = sorted(seq, key=lambda s: , reverse=True)
+# print(seq)
+
+for i in len(seq):
+    print(getattr(seq[i], "seq_len"))
 
 
 
