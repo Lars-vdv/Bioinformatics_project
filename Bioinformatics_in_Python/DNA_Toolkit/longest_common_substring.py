@@ -1,56 +1,32 @@
 import os
-print(os.getcwd())
-print(os.path.exists("test_data/rosalind_lcsm.txt"))
-
 from utilities import *
 from bio_structs import *
 from bio_seq import *
-from difflib import SequenceMatcher
-
-seq = parse_fasta(path=r"test_data\rosalind_lcsm.txt", seq_type="DNA", create_variables=False)
-
-for i in range(len(seq)):
-    print(getattr(seq[i], "seq_len"))
-
-print(getattr(seq[0], "seq_len")) #test if parsing was successful
-
-# for i in len(getattr(seq, "seq")):
-#     seq_strings = []
-#     seq__strings = seq[i]
-
-seq = sorted(seq, key=lambda s: s.seq_len, reverse=True)
 
 
-all_substrings = {}
-for i in range(len(seq)):
-    for j in range(i+1, len(seq)):
-        string1 = getattr(seq[i], "seq")
-        string2 = getattr(seq[j], "seq")
-        match = SequenceMatcher(None, string1, string2).find_longest_match(0, len(string1), 0, len(string2)) 
-        #find.longest_match is based on a[start1:end1] == b[start2:end2]
-        matching_substring = string1[match.a: match.a + match.size] # Extract the matching substring
-        if matching_substring not in all_substrings:
-            all_substrings[matching_substring] = 1
-        else:
-            all_substrings[matching_substring] += 1
+# def longest_common_substring(fasta_file_path):
+#     """
+#     Finds the longest common substring in a FASTA file.
+#     """
+#     seqs = parse_fasta(path=fasta_file_path, seq_type="DNA", create_variables=False)
 
+#     if not seqs:
+#         return ""
 
-common_substrings = []
-for i in range(len(seq)):
-    for j in range(len(all_substrings)):
-        if list(all_substrings.keys()[j]) in common_substrings in getattr(seq[i], "seq"):
-            common_substrings += all_substrings[j]
-        else:
-            continue
-    
+#     # Sort sequences by length and get the shortest one
+#     seqs = sorted(seqs, key=lambda s: s.seq_len)
+#     shortest_seq = seqs[0].seq
+#     other_seqs = [s.seq for s in seqs[1:]]
 
+#     # Iterate through all possible substrings of the shortest sequence, from longest to shortest
+#     for length in range(len(shortest_seq), 0, -1):
+#         for i in range(len(shortest_seq) - length + 1):
+#             substring = shortest_seq[i:i+length]
+            
+#             # Check if this substring exists in all other sequences using the optimized `in` operator
+#             if all(substring in other for other in other_seqs):
+#                 return substring
+                           
 
-
-#max finds the longest length of the keys in the dictionary
-#len(k) for k in common_substrings iterates over all the keys of the dictionary. You dont need a forloop nor keys() method
-lcs = [k for k in common_substrings if len(k) == max_len] 
-print(lcs)
-#list comprehension to create a list of all keys with the max length
-#k — the value yielded for the resulting list (each matched element).
-#for k in common_substrings — iterate over every item in the iterable common_substrings and bind it to k.
-#if len(k) == max_len — include k in the output only when this boolean expression is true.
+# Find the longest common substring
+lcs = longest_common_substring(fasta_file_path=r"test_data\rosalind_lcsm.txt")

@@ -4,6 +4,9 @@ from utilities import *
 from pprint import pprint
 import math
 
+# lcs = bio_seq.longest_common_substring("test_data/rosalind_lcsm.txt")
+# print(lcs)
+
 # sequences_data = parse_fasta(path="test_data/rosalind_gc.txt", seq_type="DNA", create_variables=True)
 
 # print(sequences_data['seq_1'].get_seq_info()) #alternative

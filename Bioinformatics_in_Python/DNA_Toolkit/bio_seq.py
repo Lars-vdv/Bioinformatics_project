@@ -34,12 +34,6 @@ class bio_seq:
             assert self.is_valid, f"Provided data does not seem to be a correct {self.seq_type} sequence"
             return                
 
-    # @property
-    # def seq_len(self):
-    #     "return length of sequence"
-    #     #need to do this in class, otherwise it won't work outside
-    #     return len(self.seq)
-
     # DNA Toolkit functions:
     def manual_input_seq(self, seq=None, seq_type=None, label=None):
         """Manual input of a sequence"""
@@ -364,3 +358,27 @@ class bio_seq:
                 continue
 
         return positions
+    
+    @staticmethod
+    def longest_common_substring(fasta_file_path):
+        """
+        Finds the longest common substring in a FASTA file.
+        """
+        seqs = parse_fasta(path=fasta_file_path, seq_type="DNA", create_variables=False)
+
+        if not seqs:
+            return ""
+
+        # Sort sequences by length and get the shortest one
+        seqs = sorted(seqs, key=lambda s: s.seq_len)
+        shortest_seq = seqs[0].seq
+        other_seqs = [s.seq for s in seqs[1:]]
+
+        # Iterate through all possible substrings of the shortest sequence, from longest to shortest
+        for length in range(len(shortest_seq), 0, -1):
+            for i in range(len(shortest_seq) - length + 1):
+                substring = shortest_seq[i:i+length]
+                
+                # Check if this substring exists in all other sequences using the optimized `in` operator
+                if all(substring in other for other in other_seqs):
+                    return substring
