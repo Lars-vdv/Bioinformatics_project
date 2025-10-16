@@ -33,11 +33,11 @@ class bio_seq:
             assert self.is_valid, f"Provided data does not seem to be a correct {self.seq_type} sequence"
             return                
 
-    # @property
-    # def seq_len(self):
-    #     "return length of sequence"
-    #     #need to do this in class, otherwise it won't work outside
-    #     return len(self.seq)
+    @property
+    def seq_len(self):
+        "return length of sequence"
+        #need to do this in class, otherwise it won't work outside
+        return len(self.seq)
 
     # DNA Toolkit functions:
     def manual_input_seq(self, seq=None, seq_type=None, label=None):
