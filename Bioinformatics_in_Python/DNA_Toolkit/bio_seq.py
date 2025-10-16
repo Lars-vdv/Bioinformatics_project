@@ -30,8 +30,14 @@ class bio_seq:
 
             self.seq_type = input("Enter sequence type (DNA, RNA, Protein): ")
             self.is_valid = self.__validate()
-            assert self.is_valid, f"Provided data does not seem to be a correct {self.seq_type} sequence"                
+            assert self.is_valid, f"Provided data does not seem to be a correct {self.seq_type} sequence"
+            return                
 
+    # @property
+    # def seq_len(self):
+    #     "return length of sequence"
+    #     #need to do this in class, otherwise it won't work outside
+    #     return len(self.seq)
 
     # DNA Toolkit functions:
     def manual_input_seq(self, seq=None, seq_type=None, label=None):
@@ -46,6 +52,10 @@ class bio_seq:
     def get_seq_biotype(self):
         """Returns sequence type"""
         return self.seq_type
+
+    def get_seq_len(self):
+        """Returns sequence length"""
+        return len(self.seq)
 
     def get_seq_info(self):
         """Returns 4 strings. Full sequence information"""
