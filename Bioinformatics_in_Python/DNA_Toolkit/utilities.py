@@ -161,7 +161,8 @@ def parse_fasta_streamlit(file, seq_type, create_variables=False):
     records = [] #collection of bio_seq objects
     label = None
     seq_parts = [] #list of sequence parts until the next label is found
-
+    import streamlit as st
+    import bio_seq
 
 
     count = 0
@@ -169,13 +170,12 @@ def parse_fasta_streamlit(file, seq_type, create_variables=False):
         count += line.count('>')
         
     st.write(f"There are {count} total sequences in this file.")
-
-
+    st.write(file)
     for line in file: # Iterate through each line in the file
         line = line.strip() # Remove leading/trailing whitespace
         if not line: # Skip empty lines
             continue
-
+        st.write(file)
         if line.startswith(">"): #when a new '>' is found, signals start of a new sequence
             if label is not None: #f label is already set (meaning you just finished reading one record), you:
                 full_seq = "".join(seq_parts) #join all parts of the sequence into one string
@@ -188,7 +188,7 @@ def parse_fasta_streamlit(file, seq_type, create_variables=False):
             seq_parts = [] #reset seq_parts for the next sequence
         else:
             seq_parts.append(line.upper()) # add the current line (part of the sequence) to seq_parts, converting to uppercase
-
+    st.write(file)
     if label is not None: #read the last record after the loop ends
         full_seq = "".join(seq_parts)
         temp_seq = bio_seq(full_seq, seq_type, label,raise_on_invalid=False)
