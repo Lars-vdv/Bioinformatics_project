@@ -35,8 +35,6 @@ if uploaded_file is not None:
     adjusted_file = io.StringIO(adjusted_file)
 
 
-st.write(adjusted_file)
-
 sequences= utilities.parse_fasta_streamlit(adjusted_file, seq_type=type_of_seq)
 
 st.write(sequences)

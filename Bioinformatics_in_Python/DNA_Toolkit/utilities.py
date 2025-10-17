@@ -202,7 +202,7 @@ def parse_fasta_streamlit(file, seq_type, create_variables=False):
             seq_parts = [] #reset seq_parts for the next sequence
         else:
             seq_parts.append(line.upper()) # add the current line (part of the sequence) to seq_parts, converting to uppercase
-    st.write(file)
+
     if label is not None: #read the last record after the loop ends
         full_seq = "".join(seq_parts)
         temp_seq = bio_seq(full_seq, seq_type, label,raise_on_invalid=False)
