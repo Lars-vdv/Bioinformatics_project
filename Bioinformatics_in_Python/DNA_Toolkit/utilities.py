@@ -184,12 +184,12 @@ def parse_fasta_streamlit(file, seq_type, create_variables=False):
 
 
     st.write(f"There are {count} total sequences in this file.")
-    st.write(file)
+
     for line in file: # Iterate through each line in the file
         line = line.strip() # Remove leading/trailing whitespace
         if not line: # Skip empty lines
             continue
-        st.write(file)
+
         if line.startswith(">"): #when a new '>' is found, signals start of a new sequence
             if label is not None: #f label is already set (meaning you just finished reading one record), you:
                 full_seq = "".join(seq_parts) #join all parts of the sequence into one string
