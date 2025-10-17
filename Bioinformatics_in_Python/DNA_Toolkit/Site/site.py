@@ -25,13 +25,17 @@ st.markdown(f":red[Sequence label:] {getattr(seq, "label")}")
 st.subheader("Sequence modification and analysis:")
 st.badge("Import your own FASTA.txt file below",icon ="🧬")
 
-uploaded_file = st.file_uploader("Choose a file", type="txt")
+uploaded_file = st.file_uploader("Choose a file", type="txt",label_visibility="visible", key="my_upload")
 type_of_seq = st.radio("What is the sequence type?", ["DNA","RNA","Protein"])
 
 if uploaded_file is not None:
     # wrap the UploadedFile (a bytes-file) as a text file
-    adjusted_file = io.TextIOWrapper(uploaded_file, encoding="utf-8") # optional: detach underlying buffer if you need to reuse uploaded_file
+    uploaded_file.seek(0)
+    adjusted_file = uploaded_file.getvalue().decode("utf-8")
+    adjusted_file = io.StringIO(adjusted_file)
 
+
+st.write(adjusted_file)
 
 sequences= utilities.parse_fasta_streamlit(adjusted_file, seq_type=type_of_seq)
 

@@ -163,12 +163,26 @@ def parse_fasta_streamlit(file, seq_type, create_variables=False):
     seq_parts = [] #list of sequence parts until the next label is found
     import streamlit as st
     import bio_seq
+    import io
 
+    
+    try:
+        file.seek(0)
+    except Exception:
+        pass
 
     count = 0
     for line in file:
-        count += line.count('>')
-        
+        if line.startswith(">"):
+            count += 1
+
+    # Rewind before actual parsing
+    try:
+        file.seek(0)
+    except Exception:
+        pass
+
+
     st.write(f"There are {count} total sequences in this file.")
     st.write(file)
     for line in file: # Iterate through each line in the file
