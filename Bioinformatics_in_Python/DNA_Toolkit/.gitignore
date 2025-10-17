@@ -27,8 +27,8 @@ share/python-wheels/
 MANIFEST
 
 #folders
-dir_to_ignore/test_data
-dir_to_itgnore/Old
+test_data/
+Old/
 
 
 # PyInstaller
