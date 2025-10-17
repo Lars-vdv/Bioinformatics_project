@@ -158,7 +158,7 @@ def parse_fasta_streamlit(file, seq_type, create_variables=False):
     If a sequence is invalid for the given seq_type, it will be skipped with a warning.
     """
      # Avoid circular import
-    records = [] #collection of bio_seq objects
+    records = {} #collection of bio_seq objects
     label = None
     seq_parts = [] #list of sequence parts until the next label is found
     import streamlit as st
