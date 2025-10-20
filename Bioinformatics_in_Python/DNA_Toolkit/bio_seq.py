@@ -37,7 +37,7 @@ class bio_seq:
     # DNA Toolkit functions:
     def manual_input_seq(self, seq=None, seq_type=None, label=None):
         """Manual input of a sequence"""
-        self.seq = input("Enter your sequence: ").upper()
+        self.seq = input("Enter your sequence: ")#.upper()
         self.seq_type = input("Enter sequence type (DNA, RNA, Protein): ")
         self.label = input("Enter a label for your sequence: ")
         self.is_valid = self.__validate()

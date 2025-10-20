@@ -158,7 +158,7 @@ def parse_fasta_streamlit(file, seq_type, create_variables=False):
     If a sequence is invalid for the given seq_type, it will be skipped with a warning.
     """
      # Avoid circular import
-    records = {} #collection of bio_seq objects
+    records = [] #collection of bio_seq objects
     label = None
     seq_parts = [] #list of sequence parts until the next label is found
     import streamlit as st
@@ -181,7 +181,7 @@ def parse_fasta_streamlit(file, seq_type, create_variables=False):
         if line.startswith(">"): #when a new '>' is found, signals start of a new sequence
             if label is not None: #f label is already set (meaning you just finished reading one record), you:
                 full_seq = "".join(seq_parts) #join all parts of the sequence into one string
-                temp_seq = bio_seq(full_seq, seq_type, label,raise_on_invalid=False) #create a new bio_seq object and add it to the records list
+                temp_seq = bio_seq(full_seq, seq_type, label=label,raise_on_invalid=False) #create a new bio_seq object and add it to the records list
                 if temp_seq.is_valid == True:
                     records.append(temp_seq) # add the bio_seq object to the records list only if it's valid
                 else:
@@ -193,7 +193,7 @@ def parse_fasta_streamlit(file, seq_type, create_variables=False):
 
     if label is not None: #read the last record after the loop ends
         full_seq = "".join(seq_parts)
-        temp_seq = bio_seq(full_seq, seq_type, label,raise_on_invalid=False)
+        temp_seq = bio_seq(full_seq, seq_type, label=label,raise_on_invalid=False)
         if temp_seq.is_valid:
             records.append(temp_seq)
         else:
