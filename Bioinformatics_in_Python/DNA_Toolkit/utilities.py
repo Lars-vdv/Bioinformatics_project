@@ -49,15 +49,21 @@ def read_file(file_path):
             [line.strip() for line in f] 
         )
 
-def write_file(file_path, seq, mode='w'):
+def write_file(file_path, data, mode='w'):
     """
-    Write a sequence to a file.
+    Write to a file.
     """
-    if isinstance(seq, list):
-        seq = '\n'.join(seq)
+    if isinstance(data, list):
+        data = '\n'.join(data)
 
+    if isinstance(data, dict):
+        import json
+        with open (file_path, mode) as f:
+            f.write(json.dumps(data, indent='\n'))
+            return
+        
     with open(file_path, mode) as f:
-        f.write(seq + '\n')
+        f.write(data + '\n')
 
     
 
