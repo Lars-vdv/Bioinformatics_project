@@ -1,0 +1,10 @@
+def mortal_rabbits(n, k):
+    if n == 1 or n == 2:
+        return 1
+    a, b = 1, 1  # F1, F2
+    for _ in range(3, n + 1):
+        a, b = b, b + k * a
+    return b
+
+# Example: sample input 5 3
+print(mortal_rabbits(5, 3))  # prints 19

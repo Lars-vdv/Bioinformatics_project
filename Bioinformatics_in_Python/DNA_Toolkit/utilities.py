@@ -125,7 +125,6 @@ def parse_fasta(path, seq_type, create_variables=False):
             var_name = f"seq_{i+1}" # Create a variable name like seq_1, seq_2, etc.
             sequences_dict[var_name] = record 
             print(f"Created variable '{var_name}' for sequence with label '{record.label}'")
-            print(id(sequences_dict))
         return sequences_dict
 
     else:
