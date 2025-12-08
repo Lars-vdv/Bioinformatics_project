@@ -80,3 +80,5 @@ print(protein)
 
 
 write_file("splice.txt", protein)
+
+bio_seq.splice_gene(gene_and_introns)
