@@ -1,13 +1,33 @@
-def mortal_rabbits(n, k):
-    if n == 1 or n == 2:
-        return 1
-    a, b = 1, 1  # F1, F2
-    for _ in range(3, n + 1):
-        a, b = b, b + k * a
-    return b
 
-# Example: sample input 5 3
-print(mortal_rabbits(5, 3))  # prints 19
+from Bio import SeqIO                                                  
+prefixes = []                                                          
+suffixes = []                                                          
+handle = open(r'test_data\rosalind_grph.txt', 'r')                                 
+for record in SeqIO.parse(handle, 'fasta'):                            
+    count1 = 0                                                         
+    count2 = 0                                                         
+    prefix = [record.id]                                               
+    suffix = [record.id]                                               
+    pre = ''                                                           
+    suf = ''                                                           
+    for nt in record.seq:                                              
+        if count1 < 3:                                                 
+            pre += nt                                                  
+            count1 += 1                                                
+    prefix.append(pre)                                                 
+    for tn in reversed(record.seq):                                    
+        if count2 < 3:                                                 
+            suf += tn                                                  
+            count2 += 1                                                
+    suffix.append(''.join(reversed(suf)))                              
+    prefixes.append(prefix)                                            
+    suffixes.append(suffix)                                            
+handle.close()                                                         
+                                                                       
+for i, k in enumerate(suffixes):                                       
+    currentsf = suffixes[i][1]                                         
+    currentid = suffixes[i][0]                                         
+    for j, l in enumerate(prefixes):                                   
+        if currentsf == prefixes[j][1] and currentid != prefixes[j][0]:
+            print(currentid, prefixes[j][0])                           
 
-print(len('MRKGLLSLTFLALLLIPIASILPSSQTYPNTWVIAFYPGSYPSGASPSNYTTFTVNFTVPNYLQTSNGYLLFVLTASVEANEYSNGIYLGTTYLFLQITLDFVNSANTYEITAQVWTYTGTLISYTETPITLYPNGEAFMTLLYNYNNGNVATGALQEGSTVIDVYFPTSYSYNSVTYNVINTYGFTDPSGANPSFAIEGTYTGQPPFSDTGWDGMWINGAPEPINAVAGHSSTTDVGGTAPIPSYYAESGLTLFHNVFINYWYNPYAWYFSIGTPQDYSAHGLNYVQLSEGQSYNTINGLNYALYWISP'))
-print(len('MSSQTYPNTWVIAFYPGSYPSGASPSNYTTFTVNFTVPNYLQTSNGYLLFVLTASVEANEYSNGIYLGTTYLFLQITLDFVNSANTYEITAQVWTYTGTLISYTETPITLYPNGEAFMTLLYNYNNGNVATGALQEGSTVIDVYFPTSYSYNSVTYNVINTYGFTDPSGANPSFAIEGTYTGQPPFSDTGWDGMWINGAPEPINAVAGHSSTTDVGGTAPIPSYYAESGLTLFHNVFINYWYNPYAWYFSIGTPQDYSAHGLNYVQLSEGQSYNTINGLNYALYWISP'))
