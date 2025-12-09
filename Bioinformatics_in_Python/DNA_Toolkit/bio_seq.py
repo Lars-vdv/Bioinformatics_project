@@ -368,7 +368,21 @@ class bio_seq:
         pattern = f'(?={motif})'  # Lookahead assertion to find overlapping motifs
         position_start = [m.start() + 1 for m in re.finditer(pattern, sequence)]  # +1 to convert to 1-based index
         return position_start
-    
+
+    def transitions_transversions_ratio(seq_1: bio_seq, seq_2: bio_seq):
+        Transitions = 0
+        Transversions = 0
+
+        for a, b in zip(seq_1.seq, seq_2.seq):
+            if a != b:
+                if (a == "A" and b == "G") or (a == "G" and b == "A") or (a == "C" and b == "T") or (a == "T" and b == "C"):
+                    Transitions += 1
+                else:
+                    Transversions += 1
+            else:
+                continue
+        print(f"Amount of transitions: {Transitions}\nAmount of transversions: {Transversions}\nRatio (Transitions/Transversions): {Transitions/Transversions}")
+
     @staticmethod
     def longest_common_substring(fasta_file_path):
         """
