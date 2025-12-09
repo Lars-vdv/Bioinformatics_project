@@ -369,19 +369,39 @@ class bio_seq:
         position_start = [m.start() + 1 for m in re.finditer(pattern, sequence)]  # +1 to convert to 1-based index
         return position_start
 
-    def transitions_transversions_ratio(seq_1: bio_seq, seq_2: bio_seq):
-        Transitions = 0
-        Transversions = 0
+    @staticmethod
+    def transitions_transversions_ratio(seq1, seq2):
+        """
+        Calculates the transitions/transversions ratio between two sequences.
+        Can accept bio_seq objects or strings.
+        Returns a tuple: (transitions, transversions, ratio).
+        """
+        # Ensure we are working with string sequences
+        s1 = seq1.seq if isinstance(seq1, bio_seq) else str(seq1).upper()
+        s2 = seq2.seq if isinstance(seq2, bio_seq) else str(seq2).upper()
 
-        for a, b in zip(seq_1.seq, seq_2.seq):
+        transitions = 0
+        transversions = 0
+
+        for a, b in zip(s1, s2):
             if a != b:
-                if (a == "A" and b == "G") or (a == "G" and b == "A") or (a == "C" and b == "T") or (a == "T" and b == "C"):
-                    Transitions += 1
+                if (a in "AG" and b in "AG") or (a in "CT" and b in "CT"):
+                    transitions += 1
                 else:
-                    Transversions += 1
-            else:
-                continue
-        print(f"Amount of transitions: {Transitions}\nAmount of transversions: {Transversions}\nRatio (Transitions/Transversions): {Transitions/Transversions}")
+                    transversions += 1
+
+        if transversions == 0:
+            return transitions, transversions, float('inf')
+
+        ratio = transitions / transversions
+        return transitions, transversions, ratio
+
+    def t_t_ratio(self, other_seq):
+        """
+        Instance method to calculate the transitions/transversions ratio
+        compared to another sequence.
+        """
+        return self.transitions_transversions_ratio(self.seq, other_seq)
 
     @staticmethod
     def longest_common_substring(fasta_file_path):
