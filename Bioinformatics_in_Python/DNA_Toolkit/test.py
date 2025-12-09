@@ -1,3 +1,4 @@
+import Bio
 from Bio import SeqIO                                                  
 prefixes = []                                                          
 suffixes = []                                                          
@@ -23,10 +24,15 @@ for record in SeqIO.parse(handle, 'fasta'):
     suffixes.append(suffix)                                            
 handle.close()                                                         
                                                                        
-for i, k in enumerate(suffixes):                                       
+for i, k in enumerate(suffixes): 
+    from utilities import *                                      
     currentsf = suffixes[i][1]                                         
     currentid = suffixes[i][0]                                         
     for j, l in enumerate(prefixes):                                   
         if currentsf == prefixes[j][1] and currentid != prefixes[j][0]:
+            write_file("test.txt", data=f"{currentid} {prefixes[j][0]}", mode='a')
             print(currentid, prefixes[j][0])                           
 
+
+
+#write_file("test.py", data= mode='a')

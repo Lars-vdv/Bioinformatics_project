@@ -21,7 +21,9 @@ print(random_sequence.countNucFrequency(color=True))
 print(colored(random_sequence.transcription()))
 
 #DNA reverse complement,
-print(random_sequence.reverse_complement())
+print(random_sequence.reverse_complement())     
+
+
 
 # GC content (rounded), 
 print(random_sequence.gc_content_round())
