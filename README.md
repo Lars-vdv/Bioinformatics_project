@@ -1,4 +1,4 @@
-Go to: Bioinformatics_project/Genome_Toolkit/DNA_Toolkit
+Go to: Bioinformatics_project/Bioinformatics_in_python/DNA_Toolkit
 
 Bioinformatics projects:
 In these projects I am creating my own toolkit for analysing genomes, DNA/RNA and proteins
