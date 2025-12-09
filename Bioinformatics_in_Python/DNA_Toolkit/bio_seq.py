@@ -6,7 +6,7 @@ import re
 import math
 
 class bio_seq:
-    """DNA sequnece class. Default value: ATCG, DNA, No label"""
+    """DNA sequece class. Default value: ATCG, DNA, No label"""
 
     def __init__(self, seq="ATCG", seq_type="DNA", label='No Label',raise_on_invalid=True):
         """Sequence initialization, validation."""
@@ -467,3 +467,41 @@ class bio_seq:
                 continue
             
         print(f"Amount of transitions: {Transitions}\nAmount of transversions: {Transversions}\nRatio (Transitions/Transversions): {Transitions/Transversions}")
+
+    def find_spliced_motif(seq, motif):
+        """Finds the positions of a spliced motif in a sequence.
+        Returns a list of positions (1-based index) where the motif characters appear in order within the sequence."""
+        """This function allows for both bio_seq objects and raw sequence strings as input."""
+        #grab raw sequences if bio_seq objects are provided
+        bool_1 = isinstance(seq, bio_seq)
+        if bool_1 == True:
+            seq = getattr(seq, 'seq')
+        
+        bool_2 = isinstance(motif, bio_seq)
+        if bool_2 == True:
+            motif = getattr(motif, 'seq')
+
+        index = []
+        motif_length = len(motif)
+        motif_position = 0
+
+        for i in range((len(seq))):
+            #check for matching characters
+            if seq[i] == motif[motif_position]:
+                index.append(i+1)
+                motif_position += 1
+
+            else:
+                continue
+            
+            if motif_position == motif_length:
+                
+            #print spliced positions of spliced motif
+                print("Positions found: ", index)
+                return index
+            
+                #check if full motif was found
+            else:
+                print("Motif incompletely/not present in sequence")
+                break
+                    
