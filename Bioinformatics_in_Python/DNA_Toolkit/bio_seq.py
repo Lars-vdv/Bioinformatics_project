@@ -369,20 +369,7 @@ class bio_seq:
         position_start = [m.start() + 1 for m in re.finditer(pattern, sequence)]  # +1 to convert to 1-based index
         return position_start
 
-    def transitions_transversions_ratio(seq_1: bio_seq, seq_2: bio_seq):
-        Transitions = 0
-        Transversions = 0
-
-        for a, b in zip(seq_1.seq, seq_2.seq):
-            if a != b:
-                if (a == "A" and b == "G") or (a == "G" and b == "A") or (a == "C" and b == "T") or (a == "T" and b == "C"):
-                    Transitions += 1
-                else:
-                    Transversions += 1
-            else:
-                continue
-        print(f"Amount of transitions: {Transitions}\nAmount of transversions: {Transversions}\nRatio (Transitions/Transversions): {Transitions/Transversions}")
-
+    
     @staticmethod
     def longest_common_substring(fasta_file_path):
         """
@@ -455,3 +442,28 @@ class bio_seq:
         protein = "".join(protein)
         print(f"Spliced DNA sequence:{gene_without_introns}")
         print(f"Spliced protein sequence: {protein}")
+
+    def transitions_transversions_ratio(seq_1, seq_2):
+        """Calculate the number of transitions and transversions between two sequences, along with their ratio."""
+        """This function allows for both bio_seq objects and raw sequence strings as input."""
+        Transitions = 0
+        Transversions = 0
+
+        bool_1 = isinstance(seq_1, bio_seq)
+        if bool_1 == True:
+            seq_1 = getattr(seq_1, 'seq')
+        
+        bool_2 = isinstance(seq_2, bio_seq)
+        if bool_2 == True:
+            seq_2 = getattr(seq_2, 'seq')
+
+        for a, b in zip(seq_1, seq_2):
+            if a != b:
+                if (a == "A" and b == "G") or (a == "G" and b == "A") or (a == "C" and b == "T") or (a == "T" and b == "C"):
+                    Transitions += 1
+                else:
+                    Transversions += 1
+            else:
+                continue
+            
+        print(f"Amount of transitions: {Transitions}\nAmount of transversions: {Transversions}\nRatio (Transitions/Transversions): {Transitions/Transversions}")
