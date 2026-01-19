@@ -1,5 +1,6 @@
 import sys
 import urllib.request
+from Bio import SeqIO, Entrez
 
 def colored(data):
     """Return a colored string for a sequence or a dict of nucleotide counts."""
@@ -65,7 +66,13 @@ def write_file(file_path, data, mode='w'):
     with open(file_path, mode) as f:
         f.write(data + '\n')
 
-    
+def write_fasta(file_path, label, sequence, mode='w'):
+    """
+    Write a single FASTA record to a file.
+    """
+    with open(file_path, mode) as f:
+        f.write(f">{label}\n")
+        f.write(f"{sequence}\n")    
 
 def parse_fasta(path, seq_type, create_variables=False):
     """
