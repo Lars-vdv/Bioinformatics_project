@@ -98,12 +98,8 @@ print(min_val, min_idx)
 output = bio_seq.get_seq_info(seqs.get(f"seq_{min_idx+1}"))
 print(output)
 
-# obj = seqs.get(f"seq_{min_idx+1}")
-# label = obj.label
-# sequence = obj.seq
+obj = seqs.get(f"seq_{min_idx+1}")
+label = obj.label
+sequence = obj.seq
 
-test = bio_seq(seq="ATGCGTACGTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGC", label="Test_Sequence_1")
-
-# write_file("Stronghold_GenBank_output.txt", f">{label}\n{sequence}\n")
-
-write_fasta("Stronghold_GenBank_output.fasta", label = test.label,sequence= test.seq)
+write_fasta("Stronghold_GenBank_output.fasta", label = label,sequence= sequence, mode='w')
